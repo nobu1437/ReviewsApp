@@ -6,4 +6,9 @@ struct Review: Decodable {
     /// Время создания отзыва.
     let created: String
 
+    let rating: Int
+    
+    let first_name: String
+    
+    let last_name: String
 }

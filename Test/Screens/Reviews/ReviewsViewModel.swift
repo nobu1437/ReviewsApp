@@ -52,6 +52,10 @@ private extension ReviewsViewModel {
             state.items += reviews.items.map(makeReviewItem)
             state.offset += state.limit
             state.shouldLoad = state.offset < reviews.count
+            
+            state.items.removeAll(where: { $0 is ReviewsCountCellConfig })
+            let text = "\(reviews.count) отзывов"
+            state.items.append(ReviewsCountCellConfig(countText: text.attributed(font: .reviewCount, color: .reviewCount)))
         } catch {
             state.shouldLoad = true
         }
@@ -81,10 +85,14 @@ private extension ReviewsViewModel {
     func makeReviewItem(_ review: Review) -> ReviewItem {
         let reviewText = review.text.attributed(font: .text)
         let created = review.created.attributed(font: .created, color: .created)
+        let ratingImage = ratingRenderer.ratingImage(review.rating)
+        let username = "\(review.first_name) \(review.last_name)"
+        let attributedUsername = username.attributed(font: .username)
+        let avatarImage = UIImage(resource: .l5W5AIHioYc)
         let item = ReviewItem(
             reviewText: reviewText,
             created: created,
-            onTapShowMore: showMoreReview
+            onTapShowMore: showMoreReview, reviewRatingImage: ratingImage, username: attributedUsername, avatarImage: avatarImage
         )
         return item
     }
